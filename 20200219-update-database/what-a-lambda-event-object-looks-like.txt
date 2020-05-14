@@ -1,0 +1,44 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.1",
+            "eventSource": "aws:s3",
+            "awsRegion": "ap-southeast-2",
+            "eventTime": "2020-02-22T15:15:36.533Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AXSSI6ABBMRKU"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "45.124.110.243"
+            },
+            "responseElements": {
+                "x-amz-request-id": "FD31E9BCB13285AF",
+                "x-amz-id-2": "r7QChLj+yusIVxi+wlaFMzSUAgAEeaH9cfFaNBmkGKcyVJS1cozVfnmoCvIbSS2h7Ihl5pRcFpW9+2R339zHnE0HXahK+khg"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "6b33319b-b6ae-46db-a021-c71557f0f674",
+                "bucket": {
+                    "name": "bitwise2",
+                    "ownerIdentity": {
+                        "principalId": "AXSSI6ABBMRKU"
+                    },
+                    "arn": "arn:aws:s3:::bitwise2"
+                },
+                "object": {
+                    "key": "out3.txt",
+                    "size": 4,
+                    "eTag": "37a6259cc0c1dae299a7866489dff0bd",
+                    "sequencer": "005E514599413D37A7"
+                }
+            }
+        }
+    ]
+}
+
+event.Records[0].s3.bucket.name
+'bitwise2'
+event.Records[0].s3.object.key
+'out3.txt'
+event.Records[0].s3.object.size

@@ -1,0 +1,17 @@
+{
+  "name": "update-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.620.0",
+    "gopro-telemetry": "^0.6.52",
+    "gpmf-extract": "^0.1.13",
+    "mssql": "^6.1.0"
+  }
+}

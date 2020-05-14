@@ -1,0 +1,10 @@
+AWS = require('aws-sdk');
+AWS.config.logger = process.stdout;
+s3 = new AWS.S3();
+
+
+resp=s3.listBuckets().send()
+
+bucket = 'greenview-fpg';
+key = 'GH010011.MP4';
+resp=s3.getObject({Bucket: bucket, Key: key}).send();null
