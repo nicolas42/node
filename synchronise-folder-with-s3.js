@@ -20,8 +20,12 @@ const uploadDir = function(s3Path, bucketName) {
 
     walkSync(s3Path, function(filePath, stat) {
         let bucketPath = filePath.substring(s3Path.length+1);
-        let params = {Bucket: bucketName, Key: bucketPath, Body: fs.readFileSync(filePath) };
-        s3.putObject(params, function(err, data) {
+        var options = {partSize: 10 * 1024 * 1024, queueSize: 1};
+
+        const stream = fs.createReadStream(filePath);
+        let params = {Bucket: bucketName, Key: bucketPath, Body: stream };
+        console.log('Uploading '+ bucketPath +' to ' + bucketName + '...');
+        s3.upload(params, options, function(err, data) {
             if (err) {
                 console.log(err)
             } else {
@@ -32,5 +36,4 @@ const uploadDir = function(s3Path, bucketName) {
     });
 };
 
-uploadDir("node_modules", "bitwise-nick/tmp");
-
+uploadDir("/Users/Nick/Downloads/test/", "bitwise-nick/test");
