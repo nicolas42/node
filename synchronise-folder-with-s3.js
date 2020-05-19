@@ -36,4 +36,4 @@ const uploadDir = function(s3Path, bucketName) {
     });
 };
 
-uploadDir("/Users/Nick/Downloads/test/", "bitwise-nick/test");
+uploadDir("node_modules", "bitwise-nick/test");
