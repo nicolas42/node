@@ -1,0 +1,22 @@
+var AWS = require('aws-sdk');
+process.env.AWS_REGION = 'ap-southeast-2';
+AWS.config.logger = process.stdout;
+s3 = new AWS.S3
+
+
+resp = s3.listBuckets().send(); null
+//resp.data
+//resp.error
+
+
+s3bucket = new AWS.S3({params: {Bucket: 'bitwise-public'}});
+resp = s3bucket.listObjects().send();null
+resp.data
+
+
+resp=s3bucket.getObject({Key: 'key.txt'}).send();null
+resp.data.Body.toString();
+
+// get https://bitwise-public.s3-ap-southeast-2.amazonaws.com/GH010003out.mp4
+s3bucket = new AWS.S3({params: {Bucket: 'bitwise-public'}});
+resp=s3bucket.getObject({Key: 'GH010003out.mp4'}).send();
