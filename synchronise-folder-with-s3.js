@@ -32,5 +32,5 @@ const uploadDir = function(s3Path, bucketName) {
     });
 };
 
-uploadDir("node_modules", "bitwise-nick");
+uploadDir("node_modules", "bitwise-nick/tmp");
 

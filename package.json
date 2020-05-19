@@ -1,0 +1,24 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aws-sdk-javascript-demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nicolas42/node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas42/node/issues"
+  },
+  "homepage": "https://github.com/nicolas42/node#readme",
+  "dependencies": {
+    "aws-sdk": "^2.679.0",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7"
+  }
+}
