@@ -5,6 +5,6 @@ s3 = new AWS.S3();
 
 resp=s3.listBuckets().send()
 
-bucket = 'greenview-fpg';
-key = 'GH010011.MP4';
+bucket = 'bitwise-public';
+key = 'test.mp4';
 resp=s3.getObject({Bucket: bucket, Key: key}).send();null
