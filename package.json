@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/nicolas42/node#readme",
   "dependencies": {
+    "async": "^3.2.0",
     "aws-sdk": "^2.679.0",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "recursive-readdir": "^2.2.2",
+    "s3-node-client": "^4.4.4"
   }
 }
