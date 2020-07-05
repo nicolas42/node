@@ -1,3 +1,5 @@
+// takes a minute
+
 var aws = require('aws-sdk');
 var path = require("path");
 var fs = require('fs');
