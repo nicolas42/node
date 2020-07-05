@@ -1,0 +1,179 @@
+const http = require('http');
+
+const requestListener = function (req, res) {
+  res.writeHead(200);
+  res.setHeader('Content-Type', 'text/plain');
+  res.write(`
+  <html>
+
+  <head>
+  </head>
+  
+  <body>
+  <canvas></canvas>
+  <div>
+  <!-- <button>back</button>
+  <button>forward</button>
+  <button>new</button> copies current image location -->
+  <button>previous</button>
+  <button>next</button>
+  <button>save</button>
+  </div>
+  
+  <script src="draw_mandelbrot.js"></script>
+  <script>
+  
+  var places_index = 0;
+  let places = [
+      { x: -0.6999687500000003, y: -0.2901249999999999, zoom: 1024 },
+      { x: -0.027285156250000026, y: 0.6443066406250001, zoom: 2048 },
+      { x: -0.027120712995529206, y: 0.6441158065199851, zoom: 67108864 },
+      { x: -0.027099643200635935, y: 0.6440290103852749, zoom: 268435456 },
+      { x: -0.02709963878151032, y: 0.6440290090395138, zoom: 4294967296 },
+      { x: 0.31923687500000003, y: -0.4990148437499999, zoom: 1024000 },
+      { x: 0.31923733207893373, y: -0.499014675590515, zoom: 8388608000 },
+      { x: 0.38715883591593053, y: -0.25874134865963394, zoom: 1073741824 },
+      { x: 0.1347109374999998, y: -0.6361328125, zoom: 2048 },
+      { x: 0.2681601562500003, y: -0.004765624999999972, zoom: 4096 },
+      { x: 0.38715883594200756, y: -0.2587413487062, zoom: 536870912 },
+      { x: 0.32898730468750015, y: -0.4237490234374998, zoom: 16384 },
+      { x: -1.7664619022752155, y: 0.041740019425749834, zoom: 1073741824, w: 800, h: 800, max_iterations: 855 },
+  ]
+  
+  function get_parameters_from_url(vars, url) {
+      // from https://html-online.com/articles/get-url-parameters-javascript/
+      var parts = url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+          vars[key] = value;
+      });
+      return vars;
+  }
+  
+  function update_url_without_refreshing_page(mandelbrot_entity) {
+      var m = mandelbrot_entity;
+      console.log(m)
+      // https://computerrock.com/blog/html5-changing-the-browser-url-without-refreshing-page/
+      window.history.replaceState("object or string", "Title", "?x=" + m.x + "&y=" + m.y + "&zoom=" + m.zoom + "&w=" + m.w + "&h=" + m.h + "&max_iterations=" + m.max_iterations);
+  }
+  
+  
+  function draw_mandelbrot_and_do_the_other_things(canvas, mandelbrot_entity) {
+      update_url_without_refreshing_page(mandelbrot_entity);
+      mandelbrot_entity.max_iterations = (255 + (20 * Math.log2(mandelbrot_entity.zoom)));
+      draw_mandelbrot(canvas, mandelbrot_entity);
+  }
+  
+  function draw_place() {
+      for (var key in places[places_index]) {
+          mandelbrot_entity[key] = places[places_index][key];
+      }
+      draw_mandelbrot_and_do_the_other_things(canvas, mandelbrot_entity)
+  }
+  
+  
+  
+  
+  
+  // set default parameters
+  var mandelbrot_entity = { x: -0.6999687500000003, y: -0.2901249999999999, zoom: 1024, w: 500, h: 500 };
+  mandelbrot_entity.max_iterations = (255 + (20 * Math.log2(mandelbrot_entity.zoom)));
+  get_parameters_from_url(mandelbrot_entity, window.location.href)
+  
+  let canvas = document.querySelector('canvas')
+  canvas.height = mandelbrot_entity.h;
+  canvas.width = mandelbrot_entity.w;
+  update_url_without_refreshing_page(mandelbrot_entity);
+  
+  draw_mandelbrot(canvas, mandelbrot_entity);
+  
+  
+  // Event Code
+  var on_mousedown = function (e) {
+      var x = mandelbrot_entity.x;
+      var y = mandelbrot_entity.y;
+      var zoom = mandelbrot_entity.zoom;
+  
+      if (e.which === 1) {
+          // get position of clicked mouse cursor
+          var rect = e.currentTarget.getBoundingClientRect();
+          var x_pixel = e.clientX - rect.left;
+          var y_pixel = e.clientY - rect.top;
+  
+          var math_height = 4 / zoom;
+          var math_width = 4 / zoom;
+  
+          // update globals
+          x = (x - math_width / 2) + x_pixel / (canvas.width / math_width);
+          y = (y - math_height / 2) + y_pixel / (canvas.height / math_height);
+          zoom *= 2;
+  
+      } else if (e.which === 3) { // right click
+          zoom /= 2;
+      }
+  
+  
+      let max_iterations = (255 + (20 * Math.log2(zoom)));
+      mandelbrot_entity = { x: x, y: y, zoom: zoom, w: canvas.width, h: canvas.height, max_iterations: max_iterations };
+      draw_mandelbrot_and_do_the_other_things(canvas, mandelbrot_entity)
+  
+  }
+  
+  canvas.addEventListener("mousedown", on_mousedown, false);
+  canvas.addEventListener("contextmenu", (e) => { e.preventDefault(); });
+  
+  let buttons = document.querySelectorAll('button');
+  buttons[0].addEventListener("click", (e) => { places_index--; draw_place() }, false);
+  buttons[1].addEventListener("click", (e) => { places_index++; draw_place() }, false);
+  
+  buttons[2].addEventListener("click", (e) => {
+  
+      var a = document.createElement('a');
+      a.href = window.location.href;
+  
+      var canvas = document.querySelector('canvas');
+      var img_src = canvas.toDataURL("image/png");
+  
+      var img = document.createElement('img');
+      img.src = img_src;
+      img.height = "300";
+  
+      a.appendChild(img);
+  
+      document.body.appendChild(a);
+      
+  }, false);
+  
+  
+  
+  
+  </script>
+  </body>
+  </html>
+  
+  
+  
+  
+  <!-- 
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=-0.027285156250000026&y=0.6443066406250001&zoom=2048
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=-0.027120712995529206&y=0.6441158065199851&zoom=67108864
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=-0.027099643200635935&y=0.6440290103852749&zoom=268435456
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=-0.02709963878151032&y=0.6440290090395138&zoom=4294967296
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.31923687500000003&y=-0.4990148437499999&zoom=1024000
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.31923733207893373&y=-0.499014675590515&zoom=8388608000
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.38715883591593053&y=-0.25874134865963394&zoom=1073741824
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.1347109374999998&y=-0.6361328125&zoom=2048
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.2681601562500003&y=-0.004765624999999972&zoom=4096
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.38715883594200756&y=-0.2587413487062&zoom=536870912
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=0.32898730468750015&y=-0.4237490234374998&zoom=16384
+  file:///Users/Nick/Downloads/code/nicolas42.github.io/mandelbrot/index.html?x=-1.7664619022752155&y=0.041740019425749834&zoom=1073741824&w=800&h=800&max_iterations=855 
+  -->
+  
+  
+
+
+`);
+
+res.end();
+}
+
+const server = http.createServer(requestListener);
+server.listen(8080);
