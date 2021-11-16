@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.620.0",
+    "aws-sdk": "^2.814.0",
     "gopro-telemetry": "^0.6.52",
     "gpmf-extract": "^0.1.13",
     "mssql": "^6.1.0"
